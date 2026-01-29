@@ -17,14 +17,14 @@ description: "This playbook extracts all indicators from an incident. It will th
 
 | Input Name | Value                                     |
 | :--------- | :---------------------------------------- |
-| Severity   | ${incident.labels.alert.severity}        |
-| Title      | ${incident.name} |
+| Severity   | `${incident.labels.alert.severity}`        |
+| Title      | `${incident.name}` |
 
 Playbook Triggered Inputs Updates 
 
 | **Date**   | **Input Name** | **Value**             |
 | :--------- | :------------- | :-------------------- |
-| 06/05/2025 | Severity       | ${incident.severity} |
+| 06/05/2025 | Severity       | `${incident.severity}` |
 
 Playbook Updates 
 
@@ -38,7 +38,7 @@ Playbook Updates
 
 **Playbook Key Functionality:** 
 
-Split the indicators selected into their different types, and store it within a context key: {SelectedFiles} {SelectedIPs} {SelectedDomains} {SelectedURLs}
+Split the indicators selected into their different types, and store it within a context key: `${SelectedFiles} ${SelectedIPs} ${SelectedDomains} ${SelectedURLs}`
 
 **Playbook Inputs:** 
 
@@ -59,7 +59,7 @@ Playbook Updates
 
 | **Date**   | **Updates**                                                                   |
 | :--------- | :---------------------------------------------------------------------------- |
-| 06/05/2025 | - The value for "key" within task 11,12,14,16 changed to ${inputs.Indicator} |
+| 06/05/2025 | - The value for "key" within task 11,12,14,16 changed to `${inputs.Indicator}` |
 
 ### PS – Sub playbook: ATP Submit Indicator Loop 
 
