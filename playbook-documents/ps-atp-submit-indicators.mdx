@@ -47,7 +47,7 @@ Split the indicators selected into their different types, and store it within a 
 | Title       | ${inputs.Title}              |
 | Severity    | ${inputs.Severity}           |
 | Expiry Date | ${expiry_date}               |
-| Indicator   | ${Select Indicators.Answers} |
+| Indicator   | ${SelectIndicators.Answers} |
 
 Playbook Triggered Inputs Updates 
 
@@ -79,7 +79,7 @@ If the indicator is a hash, the playbook will call another sub playbook: PS- Sub
 
 | Input Name          | Value                                                                           |
 | :------------------ | :------------------------------------------------------------------------------ |
-| Selected Indicators | ${Selected Files}, ${Selected IPs}, ${Selected Domains}, ${Selected URLs} |
+| Selected Indicators | Selected Files, Selected IPs, Selected Domains, Selected URLs |
 | Indicator Title     | XSOAR Incident ${incident.id} Indicator                  |
 | Indicator Type      | ${Indicator Type}                                                              |
 | Expiry Date         | ${inputs.Expiry Date}                                                          |
