@@ -44,10 +44,10 @@ Split the indicators selected into their different types, and store it within a 
 
 | Input Name  | Value                         |
 | :---------- | :---------------------------- |
-| Title       | ${inputs.Title}              |
-| Severity    | ${inputs.Severity}           |
-| Expiry Date | ${expiry_date}               |
-| Indicator   | ${SelectIndicators.Answers} |
+| Title       | `${inputs.Title}`             |
+| Severity    | `${inputs.Severity}`         |
+| Expiry Date | `${expiry_date} `              |
+| Indicator   | `${Select Indicators.Answers}` |
 
 Playbook Triggered Inputs Updates 
 
@@ -80,9 +80,9 @@ If the indicator is a hash, the playbook will call another sub playbook: PS- Sub
 | Input Name          | Value                                                                           |
 | :------------------ | :------------------------------------------------------------------------------ |
 | Selected Indicators | Selected Files, Selected IPs, Selected Domains, Selected URLs |
-| Indicator Title     | XSOAR Incident ${incident.id} Indicator                  |
-| Indicator Type      | ${IndicatorType}                                           |
-| Expiry Date         | ${inputs.ExpiryDate}                                                          |
+| Indicator Title     | XSOAR Incident `${incident.id}` Indicator                  |
+| Indicator Type      | `${IndicatorType}`                                           |
+| Expiry Date         | `${inputs.ExpiryDate}`                                                          |
 
 Playbook Triggered Inputs Updates 
 
@@ -110,7 +110,7 @@ Playbook Updates
 
 | Input Name      | Value                          |
 | :-------------- | :----------------------------- |
-| File Hash Value | ${inputs.Selected Indicators} |
+| File Hash Value | `${inputs.Selected Indicators}` |
 
 Playbook Triggered Inputs Updates 
 
@@ -138,7 +138,7 @@ Playbook Updates
 
 | Input Name        | Value                                                                                                                                                                                                                                                           |
 | :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Assigned To       | ${incident.owner}                                                                                                                                                                                                                                               |
+| Assigned To       | `${incident.owner}`                                                                                                                                                                                                                                               |
 | Impact            | 3                                                                                                                                                                                                                                                               |
 | Urgency           | 3                                                                                                                                                                                                                                                               |
 | Description       | This ticket is to inform you about the succesful submision of IOC in MS ATP. Please see below for reference.      Indicator Values: ${Select Indicators.Answers.0}      Thank you,      Regards,   Security Operation Center   Global Cyber Defense Operations |
@@ -148,7 +148,7 @@ Playbook Updates
 | Business service  | Networking                                                                                                                                                                                                                                                      |
 | Category          | Security                                                                                                                                                                                                                                                        |
 | Short Description | #${incident.id} \| ATP Indicator Submission                                                                                                                                                                                                              |
-| Incident Owner    | ${incident.owner}                                                                                                                                                                                                                                              |
+| Incident Owner    | `${incident.owner}`                                                                                                                                                                                                                                              |
 
 Playbook Triggered Inputs Updates 
 
