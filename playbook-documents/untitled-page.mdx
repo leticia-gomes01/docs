@@ -1,0 +1,64 @@
+---
+title: "PS – ATP Delete Submitted Indicators "
+description: "This playbook calls the “PS-Extract Indicators” sub playbook, which will extract relevant indicators from the alert. The playbook will prompt the analyst to select indicators they would like to submit for deletion. The playbook will then loop through the sub-playbook which will delete the indicator from ATP.   "
+---
+
+**Playbook Key Functionality:** 
+
+1. Call the “PS-Extract Indicators” playbook 
+
+
+2. Prompt analyst to select which indicators they would like to delete  
+
+
+3. Loop through the “PS- sub playbook: ATP Delete Indicators” for each indicator selected 
+
+**Playbook Triggered Inputs: **N/A- this playbook does not receive any inputs. It uses the outputs from the Extracted Indicators sub playbook. 
+
+Playbook Triggered Inputs Updates 
+
+| **Date**   | **Input Name** | **Value** |
+| :--------- | :------------- | :-------- |
+| 06/05/2025 | N/A            | N/A       |
+
+Playbook Updates 
+
+| **Date**   | **Updates** |
+| :--------- | :---------- |
+| 06/05/2025 | N/A         |
+
+ 
+
+## PS – Sub playbook: ATP Delete Indicators 
+
+**Playbook Description:** This sub playbook receives the selected indicator for deletion. The playbook will then validate that the indicator currently exists in Microsoft ATP. If the indicator does not exist, the playbook will print a statement informing the analyst that the indicator does not exist. If the indicator does exist, the playbook will execute the delete indicator script. If any errors occur in this step, the playbook will follow the error path and print a statement for the analyst. The playbook will then delete context for that sub playbook.  
+
+**Playbook Key Functionality:** 
+
+1. Validate that the IOC exists in Microsoft ATP 
+
+
+2. Delete the indicator form Microsoft ATP 
+
+
+3. Print a statement if the indicator is not found in Microsoft ATP or if an error occurs while deleting the indicator  
+
+**Playbook Triggered Inputs: ** 
+
+| Input Name | Value                           |
+| :--------- | :------------------------------ |
+| IOC        | \${Select Indicators.Answers.0} |
+
+ Playbook Triggered Inputs Updates 
+
+| **Date**   | **Input Name** | **Value** |
+| :--------- | :------------- | :-------- |
+| 06/05/2025 | N/A            | N/A       |
+
+ Playbook Updates 
+
+| **Date**   | **Updates** |
+| :--------- | :---------- |
+| 06/04/2025 | N/A         |
+
+ 
