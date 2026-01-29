@@ -1,184 +1,171 @@
 ---
 title: "PS - ATP Submit Indicators"
-description: "This playbook extracts all indicators from an incident. It will then ask the analyst which indicators they would like to submit to Microsoft Defender. The sub playbook then submits the indicator and creates a SNOW ticket. "
+description: "This playbook extracts all indicators from an incident. It will then ask the analyst which indicators they would like to submit to Microsoft Defender. The sub playbook then submits the indicator and creates a SNOW ticket. "
 ---
 
-**Playbook Key Functionality:** 
+**Playbook Key Functionality:** 
 
-- Setting the expiration date for the indicator to the context key: Expiry_date 
+- Setting the expiration date for the indicator to the context key: Expiry_date 
 
+- Setting the selected indicators to the context key: Select Indicators.Answers 
 
-- Setting the selected indicators to the context key: Select Indicators.Answers 
+- Submitting the indicator to Microsoft Defender 
 
+- Creating a SNOW ticket  
 
-- Submitting the indicator to Microsoft Defender 
-
-
-- Creating a SNOW ticket  
-
-**Playbook Triggered Inputs:** 
+**Playbook Triggered Inputs:** 
 
 | Input Name | Value                                     |
 | :--------- | :---------------------------------------- |
-| Severity   | \${incident.labels.alert.severity}        |
-| Title      | \${[incident.name](http://incident.name)} |
+| Severity   | ${incident.labels.alert.severity}        |
+| Title      | ${incident.name} |
 
-Playbook Triggered Inputs Updates 
+Playbook Triggered Inputs Updates 
 
 | **Date**   | **Input Name** | **Value**             |
 | :--------- | :------------- | :-------------------- |
-| 06/05/2025 | Severity       | \${incident.severity} |
+| 06/05/2025 | Severity       | ${incident.severity} |
 
-Playbook Updates 
+Playbook Updates 
 
 | **Date**   | **Updates**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | :--------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 06/05/2025 | - A conditional was added to check if the incident had a File. In other words, a conditional was added to check if the incident is a Phishing incident (phishing incidents have files). This was added because the ExtractIndicators task must extract indicators from the File, rather than from the incident     - The ability to add indicators manually was also added     - A set of tasks were added to combine all indicators (manually input or selected from indicators that were automatically extracted) into one context key |
+| 06/05/2025 | - A conditional was added to check if the incident had a File. In other words, a conditional was added to check if the incident is a Phishing incident (phishing incidents have files). This was added because the ExtractIndicators task must extract indicators from the File, rather than from the incident     - The ability to add indicators manually was also added     - A set of tasks were added to combine all indicators (manually input or selected from indicators that were automatically extracted) into one context key |
 
-##  PS - Sub playbook: Microsoft ATP Submit Indicators Contain 
+##  PS - Sub playbook: Microsoft ATP Submit Indicators Contain 
 
-**Playbook Description:** This playbook exists within the “PS – ATP Submit Indicators” playbook. This playbook evaluates what kind of indicators have been selected to be submitted. For any IPs, this playbook will run an extra step of validation if the IP selected is an internal IP.  
+**Playbook Description:** This playbook exists within the "PS – ATP Submit Indicators" playbook. This playbook evaluates what kind of indicators have been selected to be submitted. For any IPs, this playbook will run an extra step of validation if the IP selected is an internal IP.  
 
-**Playbook Key Functionality:** 
+**Playbook Key Functionality:** 
 
-- Split the indicators selected into their different types, and store it within a context key:  
+- Split the indicators selected into their different types, and store it within a context key:  
 
+- ${Selected Files} 
 
-- \${Selected Files} 
+- ${Selected IPs} 
 
+- ${Selected Domains}, 
 
-- \${Selected IPs} 
+- ${Selected URLs} 
 
-
-- \${Selected Domains}, 
-
-
-- \${Selected URLs} 
-
-**Playbook Inputs: ** 
+**Playbook Inputs:** 
 
 | Input Name  | Value                         |
 | :---------- | :---------------------------- |
-| Title       | \${inputs.Title}              |
-| Severity    | \${inputs.Severity}           |
-| Expiry Date | \${expiry_date}               |
-| Indicator   | \${Select Indicators.Answers} |
+| Title       | ${inputs.Title}              |
+| Severity    | ${inputs.Severity}           |
+| Expiry Date | ${expiry_date}               |
+| Indicator   | ${Select Indicators.Answers} |
 
-Playbook Triggered Inputs Updates 
+Playbook Triggered Inputs Updates 
 
 | **Date**   | **Input Name** | **Value** |
 | :--------- | :------------- | :-------- |
 | 06/05/2025 | N/A            | N/A       |
 
-Playbook Updates 
+Playbook Updates 
 
 | **Date**   | **Updates**                                                                   |
 | :--------- | :---------------------------------------------------------------------------- |
-| 06/05/2025 | - The value for “key” within task 11,12,14,16 changed to \${inputs.Indicator} |
+| 06/05/2025 | - The value for "key" within task 11,12,14,16 changed to ${inputs.Indicator} |
 
-### PS – Sub playbook: ATP Submit Indicator Loop 
+### PS – Sub playbook: ATP Submit Indicator Loop 
 
-**Playbook Description:** This playbook will loop through each indicator. For each indicator, the playbook will search if it already exists in Microsoft Defender. If the indicator already exists, the playbook will print a statement telling the analyst the indicator already exists. Otherwise, the playbook will ask the analyst for a description of the indicator.  
+**Playbook Description:** This playbook will loop through each indicator. For each indicator, the playbook will search if it already exists in Microsoft Defender. If the indicator already exists, the playbook will print a statement telling the analyst the indicator already exists. Otherwise, the playbook will ask the analyst for a description of the indicator.  
 
-If the indicator is a hash, the playbook will call another sub playbook: PS- Sub playbook: Identify the File Hash Type, which will identify if the Hash is MD5, SHA1 or SHA256. Then, for all indicators, it will run the Microsoft-atp-sc-indicator-create command to submit the indicator.  
+If the indicator is a hash, the playbook will call another sub playbook: PS- Sub playbook: Identify the File Hash Type, which will identify if the Hash is MD5, SHA1 or SHA256. Then, for all indicators, it will run the Microsoft-atp-sc-indicator-create command to submit the indicator.  
 
-**Playbook Key Functionality:** 
+**Playbook Key Functionality:** 
 
-- Search if an indicator already exists in Microsoft Defender 
+- Search if an indicator already exists in Microsoft Defender 
 
+- Get description for the indicator  
 
-- Get description for the indicator  
+- Submit the indicator, or print a statement telling the analyst the indicator already exists 
 
-
-- Submit the indicator, or print a statement telling the analyst the indicator already exists 
-
-**Playbook Inputs: ** 
+**Playbook Inputs:** 
 
 | Input Name          | Value                                                                           |
 | :------------------ | :------------------------------------------------------------------------------ |
-| Selected Indicators | \${Selected Files} , \${Selected IPs} , \${Selected Domains}, \${Selected URLs} |
-| Indicator Title     | XSOAR Incident \${[incident.id](http://incident.id)} Indicator                  |
-| Indicator Type      | \${Indicator Type}                                                              |
-| Expiry Date         | \${inputs.Expiry Date}                                                          |
+| Selected Indicators | ${Selected Files} , ${Selected IPs} , ${Selected Domains}, ${Selected URLs} |
+| Indicator Title     | XSOAR Incident ${incident.id} Indicator                  |
+| Indicator Type      | ${Indicator Type}                                                              |
+| Expiry Date         | ${inputs.Expiry Date}                                                          |
 
-Playbook Triggered Inputs Updates 
+Playbook Triggered Inputs Updates 
 
 | **Date**   | **Input Name** | **Value** |
 | :--------- | :------------- | :-------- |
 | 06/05/2025 | N/A            | N/A       |
 
-Playbook Updates 
+Playbook Updates 
 
 | **Date**   | **Updates** |
 | :--------- | :---------- |
 | 06/05/2025 | N/A         |
 
-## PS - Sub playbook: Identify the File Hash Type_Graph 
+## PS - Sub playbook: Identify the File Hash Type_Graph 
 
-**Playbook Description:** This playbook receives a hash value and identifies what type of hash it is (MD5, SHA-1, SHA-256).  
+**Playbook Description:** This playbook receives a hash value and identifies what type of hash it is (MD5, SHA-1, SHA-256).  
 
-**Playbook Key Functionality:** 
+**Playbook Key Functionality:** 
 
-1. Receives a hash value and correctly identifies what kind of hash it is 
+1. Receives a hash value and correctly identifies what kind of hash it is 
 
+2. Sets the hash value to the context key: "Hash Type" 
 
-2. Sets the hash value to the context key: “Hash Type” 
-
-**Playbook Inputs: ** 
+**Playbook Inputs:** 
 
 | Input Name      | Value                          |
 | :-------------- | :----------------------------- |
-| File Hash Value | \${inputs.Selected Indicators} |
+| File Hash Value | ${inputs.Selected Indicators} |
 
-Playbook Triggered Inputs Updates 
+Playbook Triggered Inputs Updates 
 
 | **Date**   | **Input Name** | **Value** |
 | :--------- | :------------- | :-------- |
 | 06/05/2025 | N/A            | N/A       |
 
-Playbook Updates 
+Playbook Updates 
 
 | **Date**   | **Updates** |
 | :--------- | :---------- |
 | 06/05/2025 | N/A         |
 
-## PS - Sub playbook: ATP Create_ServiceNowIncident 
+## PS - Sub playbook: ATP Create_ServiceNowIncident 
 
-**Playbook Description:** This playbook creates and closes a ServiceNow ticket which documents all the indicators that were selected to be submitted to Microsoft Defender.  
+**Playbook Description:** This playbook creates and closes a ServiceNow ticket which documents all the indicators that were selected to be submitted to Microsoft Defender.  
 
-**Playbook Key Functionality:** 
+**Playbook Key Functionality:** 
 
-- Create a SNOW ticket 
+- Create a SNOW ticket 
 
+- Close the SNOW ticket 
 
-- Close the SNOW ticket 
-
-**Playbook Inputs: ** 
+**Playbook Inputs:** 
 
 | Input Name        | Value                                                                                                                                                                                                                                                           |
 | :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Assigned To       | \${incident.owner                                                                                                                                                                                                                                               |
+| Assigned To       | ${incident.owner}                                                                                                                                                                                                                                               |
 | Impact            | 3                                                                                                                                                                                                                                                               |
 | Urgency           | 3                                                                                                                                                                                                                                                               |
-| Description       | This ticket is to inform you about the succesful submision of IOC in MS ATP. Please see below for reference.      Indicator Values: \${Select Indicators.Answers.0}      Thank you,      Regards,   Security Operation Center   Global Cyber Defense Operations |
+| Description       | This ticket is to inform you about the succesful submision of IOC in MS ATP. Please see below for reference.      Indicator Values: ${Select Indicators.Answers.0}      Thank you,      Regards,   Security Operation Center   Global Cyber Defense Operations |
 | SubCategory       | Other                                                                                                                                                                                                                                                           |
 | Contact Type      | Integration Tools                                                                                                                                                                                                                                               |
 | Assignment Group  | IT-EUC-Global-SecurityOperations-L2-ARM                                                                                                                                                                                                                         |
 | Business service  | Networking                                                                                                                                                                                                                                                      |
 | Category          | Security                                                                                                                                                                                                                                                        |
-| Short Description | #\${[incident.id](http://incident.id)} \| ATP Indicator Submission                                                                                                                                                                                              |
-| Incident Owner    | \${incident.owner}                                                                                                                                                                                                                                              |
+| Short Description | #${incident.id} \| ATP Indicator Submission                                                                                                                                                                                                              |
+| Incident Owner    | ${incident.owner}                                                                                                                                                                                                                                              |
 
- Playbook Triggered Inputs Updates 
+Playbook Triggered Inputs Updates 
 
 | **Date**   | **Input Name** | **Value** |
 | :--------- | :------------- | :-------- |
 | 06/05/2025 | N/A            | N/A       |
 
-Playbook Updates 
+Playbook Updates 
 
 | **Date**   | **Updates** |
 | :--------- | :---------- |
 | 06/05/2025 | N/A         |
-
- 
