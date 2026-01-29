@@ -84,6 +84,7 @@
       {
         "tab": "Playbook Documents",
         "pages": [
+          "playbook-documents/ps-atp-delete-indicators",
           "playbook-documents/ps-atp-submit-indicators"
         ]
       }
